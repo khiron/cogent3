@@ -5,42 +5,42 @@ from numba.core.types.containers import Tuple
 # turn off code coverage as njit-ted code not accessible to coverage
 
 
-@njit(
-    Tuple(
-        types=(
-            Tuple(types=(int64, int64)),
-            int64,
-            float64,
-        )
-    )(
-        int64[::1],
-        int64[::1],
-        int64[::1],
-        int64,
-        int64,
-        int64,
-        int64,
-        optional(int64[::1]),
-        optional(int64[::1]),
-        optional(int64[::1]),
-        optional(int64[::1]),
-        int64[:, ::1],
-        float64[:, ::1],
-        float64[:, ::1],
-        float64[:, ::1],
-        float64[:, :, ::1],
-        optional(float64[:, :, ::1]),
-        float64,
-        optional(int64[:, :, ::1]),
-        optional(uint8[:, :, ::1]),
-        optional(int64[::1]),
-        boolean,
-        boolean,
-        boolean,
-        boolean,
-    ),
-    cache=True,
-)
+# @njit(
+#     Tuple(
+#         types=(
+#             Tuple(types=(int64, int64)),
+#             int64,
+#             float64,
+#         )
+#     )(
+#         int64[::1],
+#         int64[::1],
+#         int64[::1],
+#         int64,
+#         int64,
+#         int64,
+#         int64,
+#         optional(int64[::1]),
+#         optional(int64[::1]),
+#         optional(int64[::1]),
+#         optional(int64[::1]),
+#         int64[:, ::1],
+#         float64[:, ::1],
+#         float64[:, ::1],
+#         float64[:, ::1],
+#         float64[:, :, ::1],
+#         optional(float64[:, :, ::1]),
+#         float64,
+#         optional(int64[:, :, ::1]),
+#         optional(uint8[:, :, ::1]),
+#         optional(int64[::1]),
+#         boolean,
+#         boolean,
+#         boolean,
+#         boolean,
+#     ),
+#     cache=True,
+# )
 def calc_rows(
     plan,
     x_index,
@@ -68,6 +68,7 @@ def calc_rows(
     use_scaling=False,
     use_logs=False,
 ):  # pragma: no cover
+    # raise RuntimeError("PairHMM is not implemented")
     assert not (use_logs and not viterbi)
     assert not (use_logs and use_scaling)
     assert not (local and not viterbi)

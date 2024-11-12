@@ -4,7 +4,7 @@ from numba import njit
 # turn off code coverage as njit-ted code not accessible to coverage
 
 
-@njit(cache=True)
+# @njit(cache=True)
 def sum_input_likelihoods(child_indexes, result, likelihoods):  # pragma: no cover
     C = child_indexes.shape[0]
     for child in range(C):
@@ -25,7 +25,7 @@ def sum_input_likelihoods(child_indexes, result, likelihoods):  # pragma: no cov
     return result
 
 
-@njit(cache=True)
+# @njit(cache=True)
 def inner_product(input_likelihoods, mprobs):  # pragma: no cover
     res = 0.0
     for i in range(len(mprobs)):
@@ -33,7 +33,7 @@ def inner_product(input_likelihoods, mprobs):  # pragma: no cover
     return res
 
 
-@njit(cache=True)
+# @njit(cache=True)
 def get_log_sum_across_sites(lhs, counts):  # pragma: no cover
     log_lhs = numpy.log(lhs)
     res = 0.0

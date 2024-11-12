@@ -38,12 +38,14 @@ class IncompleteScopeError(ScopeError):
 class _ExistentialQualifier(object):
     def __init__(self, cats=None):
         self.cats = cats
-
-    def __repr__(self):
-        if self.cats is None:
-            return self.__class__.__name__
-        else:
-            return f"{self.__class__.__name__}({self.cats})"
+    
+    import sys
+    if not sys.gettrace():  # Only define this representation if not debugging
+        def __repr__(self):
+            if self.cats is None:
+                return self.__class__.__name__
+            else:
+                return f"{self.__class__.__name__}({self.cats})"
 
 
 class EACH(_ExistentialQualifier):
@@ -96,8 +98,10 @@ class Undefined(object):
     def __init__(self, name):
         self.name = name
 
-    def __repr__(self):
-        return f"Undef({self.name})"
+    import sys
+    if not sys.gettrace():  # Only define this representation if not debugging
+        def __repr__(self):
+            return f"Undef({self.name})"
 
 
 def nullor(name, f, recycled=False):
@@ -399,13 +403,15 @@ class _Defn(object):
                 for (label1, label2, settings) in body
             ]
         )
-
-    def __repr__(self):
-        return "%s(%s x %s)" % (
-            self.__class__.__name__,
-            self.name,
-            len(getattr(self, "cells", [])),
-        )
+    
+    import sys
+    if not sys.gettrace():  # Only define this representation if not debugging
+        def __repr__(self):
+            return "%s(%s x %s)" % (
+                self.__class__.__name__,
+                self.name,
+                len(getattr(self, "cells", [])),
+            )
 
 
 class SelectFromDimension(_Defn):
@@ -617,11 +623,13 @@ class _LeafDefn(_Defn):
             (lowest, default, highest) = self.get_default_setting().get_bounds()
         return (lowest, highest)
 
-    def __repr__(self):
-        return "%s(%s)" % (
-            self.__class__.__name__,
-            self._local_repr(col_width=6, max_width=60),
-        )
+    import sys
+    if not sys.gettrace():  # Only define this representation if not debugging
+        def __repr__(self):
+            return "%s(%s)" % (
+                self.__class__.__name__,
+                self._local_repr(col_width=6, max_width=60),
+            )
 
     def _local_repr(self, col_width, max_width):
         template = f"%{col_width}.{(col_width - 1) // 2}f"
@@ -794,9 +802,14 @@ class ParameterController(object):
         # use topological sort order
         for defn in self.defns:
             if id(defn) in self._changed:
-                defn.update()
-                for c in defn.clients:
-                    self._changed.add(id(c))
+                try: 
+                    defn.update()
+                    for c in defn.clients:
+                        self._changed.add(id(c))
+                except RuntimeError as e:
+                    print(f"{self=} {defn=}")
+                    raise e
+
         self._changed.clear()
 
     def assign_all(self, par_name, *args, **kw):

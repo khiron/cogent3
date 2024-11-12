@@ -50,19 +50,21 @@ class TransitionMatrix(object):
             x = random_series.uniform(0.0, 1.0)
             state = bisect.bisect_left(partitions[state], x)
 
-    def __repr__(self):
-        from cogent3.util.table import Table
+    import sys
+    if not sys.gettrace():  # Only define this representation if not debugging
+        def __repr__(self):
+            from cogent3.util.table import Table
 
-        labels = []
-        for i, label in enumerate(self.Tags):
-            if hasattr(label, "__len__") and not isinstance(label, str):
-                label = ",".join(str(z) for z in label)
-            # Table needs unique labels
-            label = f"{label} ({i})"
-            labels.append(label)
-        heading = [""] + labels
-        a = [[name] + list(row) for (name, row) in zip(labels, self.Matrix)]
-        return str(Table(header=heading, data=a))
+            labels = []
+            for i, label in enumerate(self.Tags):
+                if hasattr(label, "__len__") and not isinstance(label, str):
+                    label = ",".join(str(z) for z in label)
+                # Table needs unique labels
+                label = f"{label} ({i})"
+                labels.append(label)
+            heading = [""] + labels
+            a = [[name] + list(row) for (name, row) in zip(labels, self.Matrix)]
+            return str(Table(header=heading, data=a))
 
     def withoutSilentStates(self):
         """An equivalent matrix without any of the states that have a
