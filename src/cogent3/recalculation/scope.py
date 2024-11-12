@@ -804,6 +804,9 @@ class ParameterController(object):
             if id(defn) in self._changed:
                 try: 
                     defn.update()
+                    if 'log' not in self.__dict__:
+                        self.log = []
+                    self.log.append('| '+type(defn).__name__ +' | '+ str(defn.name) +' | '+ str(getattr(defn, 'calc', '')) +' | '+ str(defn.values) +' |')
                     for c in defn.clients:
                         self._changed.add(id(c))
                 except RuntimeError as e:
